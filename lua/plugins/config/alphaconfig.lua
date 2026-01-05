@@ -1,16 +1,15 @@
 return function()
-    local alpha = require("alpha")
+	local alpha = require("alpha")
 
-    -- choose theme here
-    local theme = require("plugins.config.alphathemes.cowsay")
+	-- choose theme here
+	local theme = require("plugins.config.alphathemes.cowsay")
 
-    alpha.setup(theme.config)
+	alpha.setup(theme.config)
 
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = "alpha",
-        callback = function()
-            vim.opt_local.foldenable = false
-        end,
-    })
-
+	vim.api.nvim_create_autocmd("FileType", {
+		pattern = "alpha",
+		callback = function()
+			vim.opt_local.foldenable = false
+		end,
+	})
 end

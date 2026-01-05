@@ -1,4 +1,1 @@
-return function ()
-
-
-end
+return function() end

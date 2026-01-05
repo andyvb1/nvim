@@ -1,3 +1,3 @@
 return function()
-    require("flash").setup({})
+	require("flash").setup({})
 end

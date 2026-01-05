@@ -77,11 +77,11 @@ M.panda = [[
 ]]
 
 function M.get(name)
-    local logo = M[name]
-    if not logo then
-        return { "Neovim" }
-    end
-    return vim.split(logo, "\n", { trimempty = false })
+	local logo = M[name]
+	if not logo then
+		return { "Neovim" }
+	end
+	return vim.split(logo, "\n", { trimempty = false })
 end
 
 return M

@@ -1,9 +1,9 @@
 return function()
-    local lsp = vim.lsp
+	local lsp = vim.lsp
 
-    pcall(function()
-        lsp.enable("nushell")
-    end)
+	pcall(function()
+		lsp.enable("nushell")
+	end)
 
-    require("lspmappings")
+	require("lspmappings")
 end
