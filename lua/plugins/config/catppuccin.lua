@@ -76,6 +76,7 @@ local function variant1()
 			hop = true,
 			illuminate = { enabled = true },
 			native_lsp = { enabled = true, inlay_hints = { background = true } },
+			notify = true,
 			neogit = true,
 			neotree = { enabled = true, transparent_panel = true },
 			semantic_tokens = true,
