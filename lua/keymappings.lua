@@ -51,9 +51,9 @@ wk.register({
 		c = { dap.continue, with_icon(dapui_icons.play, "Continue / Attach") },
 		C = {
 			function()
-				jdtls.test_class()
+				jdtls.test_nearest_method()
 			end,
-			"Java Test Class",
+			"jdt test nearest method",
 		},
 		s = { dap.step_over, with_icon(dapui_icons.step_over, "Step Over") },
 		i = { dap.step_into, with_icon(dapui_icons.step_into, "Step Into") },

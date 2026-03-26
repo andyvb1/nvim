@@ -1,4 +1,4 @@
-# ⚡ Neovim Configuration
+# Neovim Configuration
 
 > A feature-rich Neovim setup
 
@@ -7,7 +7,7 @@
 
 ---
 
-## ⚠️ Critical Prerequisites
+## Prerequisites
 
 - Neovim 0.11.5+ with a true-color terminal
 - Git on `PATH` (for `lazy.nvim` bootstrap, `gitsigns.nvim`, `neo-tree` git status)
@@ -18,7 +18,7 @@
 
 ---
 
-## 📦 External Dependencies (per feature)
+## External Dependencies
 
 ### Language runtimes, LSPs, and DAP
 
@@ -50,7 +50,7 @@
 
 ---
 
-## 🚀 Quick Install
+## Quick Install
 
 ### Arch Linux
 
@@ -71,9 +71,10 @@ sudo apt install git ripgrep fd-find bat sed build-essential nodejs npm python3 
 
 ---
 
-## 📝 Notes
+## Notes
 
 - Tested on neovim 0.11.5-0.12.0 .
+- Java Test requires org.junit.platform:junit-platform-launcher 
 - Mason manages LSP/DAP installs (`lua_ls`, `pyright`, `rust_analyzer`, `jdtls`, `eslint`, Java debug/test).
 - Treesitter parsers compile on-demand (requires a working compiler toolchain).
 - **Recommended Nerd Font:** [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)

@@ -10,11 +10,11 @@ return function()
 	local root_markers = {
 		"settings.gradle",
 		"settings.gradle.kts",
+		"gradlew",
+		"mvnw",
 		"pom.xml",
 		"build.gradle",
 		"build.gradle.kts",
-		"mvnw",
-		"gradlew",
 	}
 
 	local root_dir = jdtls.setup.find_root(root_markers)
@@ -29,15 +29,19 @@ return function()
 		{
 			name = "default",
 			path = "/usr/lib/jvm/default",
-			default = true,
 		},
 		{
 			name = "JavaSE-25",
 			path = "/usr/lib/jvm/java-25-openjdk",
 		},
 		{
+			name = "JavaSE-17",
+			path = "/usr/lib/jvm/java-17-openjdk",
+		},
+		{
 			name = "JavaSE-11",
 			path = "/usr/lib/jvm/java-11-openjdk",
+			default = true,
 		},
 		{
 			name = "JavaSE-8",
@@ -67,11 +71,43 @@ return function()
 		return bundles
 	end
 
+	local completion = {
+		favoriteStaticMembers = {
+			-- JUnit 5 Assertions
+			"org.junit.jupiter.api.Assertions.*",
+			"org.junit.jupiter.api.Assumptions.*",
+			"org.junit.jupiter.api.DynamicContainer.*",
+			"org.junit.jupiter.api.DynamicTest.*",
+
+			-- Mockito
+			"org.mockito.Mockito.*",
+			"org.mockito.ArgumentMatchers.*",
+			"org.mockito.Answers.*",
+
+			-- AssertJ (Preferred for Spring Boot)
+			"org.assertj.core.api.Assertions.*",
+
+			-- Spring Test & MVC Matchers
+			"org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
+			"org.springframework.test.web.servlet.result.MockMvcResultMatchers.*",
+			"org.springframework.test.web.servlet.setup.MockMvcBuilders.*",
+
+			-- Hamcrest
+			"org.hamcrest.Matchers.*",
+			"org.hamcrest.CoreMatchers.*",
+
+			-- Java Utils
+			"java.util.Objects.requireNonNull",
+			"java.util.Objects.requireNonNullElse",
+		},
+	}
+
 	local jdtls_config = {
 		cmd = { vim.fn.stdpath("data") .. "/mason/bin/jdtls", "-data", workspace_dir },
 		root_dir = root_dir,
 		settings = {
 			java = {
+				completion = completion,
 				--[[
                 format = {
                     --using conform with google-java-style but this is backup
@@ -81,10 +117,16 @@ return function()
                 },]]
 				inlayHints = { parameterNames = { enabled = "all" } },
 				configuration = {
-					updateBuildConfiguration = "disabled",
+					updateBuildConfiguration = "interactive",
 					runtimes = runtimes,
 				},
 				import = {
+					gradle = {
+						enabled = true,
+						wrapper = {
+							enabled = true,
+						},
+					},
 					exclusions = {
 						"**/node_modules/**",
 						"**/.metadata/**",
@@ -100,6 +142,7 @@ return function()
 		},
 		on_attach = function(_, _)
 			-- LSP-only attach; DAP handled globally in dap_setup
+			jdtls.update_project_config()
 		end,
 	}
 
@@ -110,6 +153,7 @@ return function()
 		end,
 	})
 
+	--[[
 	local function set_java_runtime(name)
 		for _, rt in ipairs(runtimes) do
 			rt.default = (rt.name == name)
@@ -142,5 +186,5 @@ return function()
 				return rt.name
 			end, runtimes)
 		end,
-	})
+	})]]
 end
