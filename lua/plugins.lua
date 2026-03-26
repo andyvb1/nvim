@@ -206,6 +206,11 @@ local plugins = {
 		"stevearc/conform.nvim",
 		config = require("plugins.config.conform"),
 	},
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = require("plugins.config.todo-comments"),
+	},
 	-- local
 	--{ dir = "" },
 }
