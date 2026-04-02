@@ -138,16 +138,6 @@ wk.register({
 	},
 }, { prefix = "<leader>" })
 
---  ChatGPT (Gp)
-wk.register({
-	u = {
-		name = "Chat GPT",
-		g = { "<cmd>GpChatToggle popup<cr>", "Toggle Chat" },
-		r = { "<cmd>GpChatRespond<cr>", "Respond" },
-		n = { "<cmd>GpChatNew popup<cr>", "New Chat" },
-	},
-}, { mode = "n", prefix = "<leader>" })
-
 --  Gitsigns
 wk.register({
 	g = {

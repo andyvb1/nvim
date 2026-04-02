@@ -187,7 +187,6 @@ local plugins = {
 		},
 		config = require("plugins.config.dapui"),
 	},
-	{ "robitx/gp.nvim" },
 	{
 		"norcalli/nvim-colorizer.lua",
 		config = require("plugins.config.colorizer"),
