@@ -35,6 +35,10 @@ return function()
 			path = "/usr/lib/jvm/java-25-openjdk",
 		},
 		{
+			name = "JavaSE-21",
+			path = "/usr/lib/jvm/java-21-openjdk",
+		},
+		{
 			name = "JavaSE-17",
 			path = "/usr/lib/jvm/java-17-openjdk",
 		},
@@ -63,7 +67,7 @@ return function()
 
 		local test_jars = vim.split(vim.fn.glob(java_test_path .. "/*.jar", true), "\n")
 		for _, jar in ipairs(test_jars) do
-			if jar ~= "" then
+			if jar ~= "" and not jar:match("jacocoagent") then
 				table.insert(bundles, jar)
 			end
 		end
