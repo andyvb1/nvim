@@ -41,6 +41,12 @@ vim.keymap.set("n", "<F2>", "<Cmd>Neotree toggle<CR>")
 wk.register({
 	d = {
 		name = "Debug",
+		["1"] = {
+			function()
+				jdtls.test_class()
+			end,
+			"Test java class",
+		},
 		b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
 		B = {
 			function()
