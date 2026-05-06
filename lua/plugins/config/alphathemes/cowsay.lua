@@ -14,7 +14,9 @@ end
 
 local function get_fortune()
 	if command_exists("fortune") and command_exists("cowsay") then
-		local handle = io.popen("fortune -s | cowsay")
+		local handle = io.popen(
+			"fortune -s | cowsay -f " .. vim.fn.stdpath("config") .. "/lua/plugins/config/alphathemes/cow/panda.cow"
+		)
 		if handle then
 			local result = handle:read("*a")
 			handle:close()
