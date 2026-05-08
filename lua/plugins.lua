@@ -70,6 +70,10 @@ local plugins = {
 		config = require("plugins.config.telescope"),
 	},
 	{
+		"folke/trouble.nvim",
+		config = require("plugins.config.trouble"),
+	},
+	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = require("plugins.config.lualine"),
