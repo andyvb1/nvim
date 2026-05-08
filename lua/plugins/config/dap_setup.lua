@@ -150,6 +150,5 @@ return function()
 			setup_java_dap()
 		end
 	end
-
 	---
 end

@@ -23,7 +23,7 @@ return function()
 	end
 
 	local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
-	local workspace_dir = vim.fn.stdpath("data") .. "/jdtls-workspaces/" .. project_name
+	local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls-workspaces/" .. project_name
 
 	local runtimes = {
 		{
@@ -149,6 +149,8 @@ return function()
 			jdtls.update_project_config()
 		end,
 	}
+
+	vim.list_extend(jdtls_config.init_options.bundles, require("spring_boot").java_extensions())
 
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = "java",

@@ -180,6 +180,15 @@ local plugins = {
 		config = require("plugins.config.jdtls"),
 	},
 	{
+		"JavaHello/spring-boot.nvim",
+		ft = { "java", "yaml", "jproperties" },
+		dependencies = {
+			"mfussenegger/nvim-jdtls",
+		},
+		---@type bootls.Config
+		opts = {},
+	},
+	{
 		"mfussenegger/nvim-dap",
 		config = require("plugins.config.dap_setup"),
 	},
