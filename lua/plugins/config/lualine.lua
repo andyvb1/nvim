@@ -4,20 +4,22 @@ return function()
 			theme = "catppuccin-mocha",
 			component_separators = { left = "│", right = "│" },
 			section_separators = { left = "", right = "" },
-			globalstatus = true, -- optional: single bar across the bottom
+			globalstatus = true,
 		},
+
 		sections = {
 			lualine_a = {
 				{ "mode", separator = { left = "" }, right_padding = 2 },
 			},
+
 			lualine_b = {
 				"filename",
 				"branch",
 			},
+
 			lualine_c = {
 				"fileformat",
 
-				-- DAP stepping mode indicator
 				function()
 					if _G.dap_step_mode_status then
 						return _G.dap_step_mode_status()
@@ -25,14 +27,33 @@ return function()
 					return ""
 				end,
 			},
-			lualine_x = {},
+
+			lualine_x = {
+				{
+					"diagnostics",
+					sources = { "nvim_diagnostic" },
+
+					symbols = {
+						error = " ",
+						warn = " ",
+						info = " ",
+						hint = "󰌵 ",
+					},
+
+					colored = true,
+					update_in_insert = false,
+					always_visible = false,
+				},
+			},
+
 			lualine_y = { "filetype", "progress" },
+
 			lualine_z = {
 				{ "location", separator = { right = "" }, left_padding = 2 },
 			},
 		},
-		inactive_sections = {
 
+		inactive_sections = {
 			lualine_a = { "filename" },
 			lualine_b = {},
 			lualine_c = {},
@@ -40,6 +61,7 @@ return function()
 			lualine_y = {},
 			lualine_z = { "location" },
 		},
+
 		tabline = {},
 		extensions = {},
 	})
