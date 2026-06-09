@@ -71,7 +71,7 @@ local function variant1()
 		integration_default = false,
 		integrations = {
 			barbecue = { dim_dirname = true, bold_basename = true, dim_context = false, alt_background = false },
-			cmp = true,
+			blink_cmp = true,
 			gitsigns = true,
 			hop = true,
 			illuminate = { enabled = true },
@@ -88,7 +88,7 @@ local function variant1()
 		highlight_overrides = {
 			all = function(colors)
 				return {
-					CmpItemMenu = { fg = colors.surface2 },
+					BlinkCmpLabelDetail = { fg = colors.surface2 },
 					CursorLineNr = { fg = colors.text },
 					FloatBorder = { bg = colors.base, fg = colors.surface0 },
 					GitSignsChange = { fg = colors.peach },
@@ -419,7 +419,7 @@ local function default()
 		default_integrations = true,
 		auto_integrations = false,
 		integrations = {
-			cmp = true,
+			blink_cmp = true,
 			gitsigns = true,
 			nvimtree = true,
 			notify = true,

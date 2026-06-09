@@ -113,6 +113,7 @@ return function()
 
 	local jdtls_config = {
 		cmd = { vim.fn.stdpath("data") .. "/mason/bin/jdtls", "-data", workspace_dir },
+		capabilities = require("blink.cmp").get_lsp_capabilities(),
 		root_dir = root_dir,
 		settings = {
 			java = {
