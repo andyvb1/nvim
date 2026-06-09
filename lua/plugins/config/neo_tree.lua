@@ -217,8 +217,8 @@ return function()
 			},
 			window = {
 				mappings = {
-					["z"] = "none",
-
+					["Z"] = "expand_all_subnodes",
+					["X"] = "close_all_subnodes",
 					["zo"] = neotree_zo,
 					["zO"] = neotree_zO,
 					["zc"] = neotree_zc,

@@ -7,7 +7,7 @@ return function()
 		formatters_by_ft = {
 			lua = { "stylua" },
 			python = { "isort", "black" },
-			java = { "google-java-format", lsp_format = "fallback" },
+			java = { "google-java-format", "trim_whitespace", "trim_newlines", lsp_format = "fallback" },
 			rust = { "rustfmt", lsp_format = "fallback" },
 			javascript = { "prettierd", "prettier", stop_after_first = true },
 			typescript = { "prettierd", "prettier", stop_after_first = true },

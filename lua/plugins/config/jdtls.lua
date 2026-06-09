@@ -60,6 +60,11 @@ return function()
 	local function get_bundles()
 		local bundles = {}
 
+		local lombok_jar = vim.fn.glob(mason_path .. "/jdtls/lombok.jar", true)
+		if lombok_jar ~= "" then
+			table.insert(bundles, lombok_jar)
+		end
+
 		local debug_jar = vim.fn.glob(java_debug_path .. "/com.microsoft.java.debug.plugin-*.jar", true)
 		if debug_jar ~= "" then
 			table.insert(bundles, debug_jar)
