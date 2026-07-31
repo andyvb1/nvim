@@ -35,6 +35,7 @@ return function()
 				},
 			},
 			documentation = {
+				treesitter_highlighting = true,
 				auto_show = true,
 				window = { border = "rounded" },
 			},

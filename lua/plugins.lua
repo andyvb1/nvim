@@ -55,6 +55,8 @@ local plugins = {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		config = require("plugins.config.treesitter"),
+		branch = "main",
+		build = ":TSUpdate",
 	},
 	{
 		"Wansmer/treesj",
@@ -217,6 +219,9 @@ local plugins = {
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = require("plugins.config.todo-comments"),
+	},
+	{
+		"ThePrimeagen/vim-be-good",
 	},
 	-- local
 	--{ dir = "" },
