@@ -36,6 +36,7 @@ vim.cmd("au TextYankPost * lua vim.highlight.on_yank {on_visual = true}")
 utils.opt("o", "list", true)
 vim.opt.listchars:append("eol:↴")
 vim.opt.termguicolors = true
+vim.opt.signcolumn = "yes"
 
 -- which-key
 --vim.o.timeout = true
