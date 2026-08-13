@@ -13,6 +13,11 @@ local function with_icon(icon, label)
 	return label
 end
 
+-- trouble
+wk.register({
+	q = { "<cmd>Trouble diagnostics toggle<cr>", "Diagnostics List (Trouble)" },
+}, { prefix = "<leader>" })
+
 --  ToggleTerm Key Mappings
 utils.map("i", [[<C-\>]], '<cmd>exe v:count1 . "ToggleTerm size=80 direction=vertical"<CR>')
 utils.map("n", [[<C-\>]], '<cmd>exe v:count1 . "ToggleTerm size=20 direction=horizontal"<CR>')
