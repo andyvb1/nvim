@@ -53,6 +53,55 @@ return function()
 		},
 	}
 
+	-- Per-project runtime override
+	-- Reads an optional <root_dir>/.nvim-jdtls.json of the form:
+	--   { "runtime": "JavaSE-21" }
+	local function read_project_runtime(root)
+		local conf_path = root .. "/.nvim-jdtls.json"
+		local file = io.open(conf_path, "r")
+		if not file then
+			vim.notify("No project runtime config file: " .. conf_path, vim.log.levels.INFO)
+			return nil
+		end
+		local src = file:read("*a")
+		file:close()
+
+		local ok, decoded = pcall(vim.json.decode, src)
+		if not ok then
+			vim.notify(".nvim-jdtls.json: invalid JSON: " .. tostring(decoded), vim.log.levels.WARN)
+			return nil
+		end
+
+		if type(decoded) ~= "table" or type(decoded.runtime) ~= "string" then
+			vim.notify('nvim-jdtls.json: expected {"runtime": "<name>"}', vim.log.levels.WARN)
+			return nil
+		end
+
+		return decoded.runtime
+	end
+
+	local wanted_runtime = read_project_runtime(root_dir)
+	if wanted_runtime then
+		local matched = false
+		for _, rt in ipairs(runtimes) do
+			local is_match = rt.name == wanted_runtime
+			rt.default = is_match or nil
+			if is_match then
+				matched = true
+			end
+		end
+
+		if matched then
+			vim.notify("jdtls: project override -> " .. wanted_runtime, vim.log.levels.INFO)
+		else
+			vim.notify(
+				"jdtls_conf.json: '" .. wanted_runtime .. "' isn't a configured runtime name, ignoring",
+				vim.log.levels.WARN
+			)
+		end
+	end
+	--
+
 	local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
 	local java_debug_path = mason_path .. "/java-debug-adapter/extension/server"
 	local java_test_path = mason_path .. "/java-test/extension/server"
@@ -87,24 +136,19 @@ return function()
 			"org.junit.jupiter.api.Assumptions.*",
 			"org.junit.jupiter.api.DynamicContainer.*",
 			"org.junit.jupiter.api.DynamicTest.*",
-
 			-- Mockito
 			"org.mockito.Mockito.*",
 			"org.mockito.ArgumentMatchers.*",
 			"org.mockito.Answers.*",
-
 			-- AssertJ (Preferred for Spring Boot)
 			"org.assertj.core.api.Assertions.*",
-
 			-- Spring Test & MVC Matchers
 			"org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
 			"org.springframework.test.web.servlet.result.MockMvcResultMatchers.*",
 			"org.springframework.test.web.servlet.setup.MockMvcBuilders.*",
-
 			-- Hamcrest
 			"org.hamcrest.Matchers.*",
 			"org.hamcrest.CoreMatchers.*",
-
 			-- Java Utils
 			"java.util.Objects.requireNonNull",
 			"java.util.Objects.requireNonNullElse",
@@ -119,12 +163,12 @@ return function()
 			java = {
 				completion = completion,
 				--[[
-                format = {
-                    --using conform with google-java-style but this is backup
-                    enabled = true,
-                    url = vim.fn.expand("~/.config/nvim/lua/formatter/eclipse-java-google-style.xml"),
-                    profile = "GoogleStyle", -- Must match the <profile name="..."> in the X
-                },]]
+				format = {
+					--using conform with google-java-style but this is backup
+					enabled = true,
+					url = vim.fn.expand("~/.config/nvim/lua/formatter/eclipse-java-google-style.xml"),
+					profile = "GoogleStyle", -- Must match the <profile name="..."> in the X
+				},]]
 				inlayHints = { parameterNames = { enabled = "all" } },
 				configuration = {
 					updateBuildConfiguration = "interactive",
@@ -164,39 +208,4 @@ return function()
 			jdtls.start_or_attach(jdtls_config)
 		end,
 	})
-
-	--[[
-	local function set_java_runtime(name)
-		for _, rt in ipairs(runtimes) do
-			rt.default = (rt.name == name)
-		end
-
-		for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
-			if client.name == "jdtls" then
-				client.notify("workspace/didChangeConfiguration", {
-					settings = {
-						java = {
-							configuration = {
-								runtimes = runtimes,
-							},
-						},
-					},
-				})
-				vim.notify("Switched Java runtime to " .. name, vim.log.levels.INFO)
-				return
-			end
-		end
-		vim.notify("No active jdtls client found", vim.log.levels.WARN)
-	end
-
-	vim.api.nvim_create_user_command("JavaSetRuntime", function(opts)
-		set_java_runtime(opts.args)
-	end, {
-		nargs = 1,
-		complete = function()
-			return vim.tbl_map(function(rt)
-				return rt.name
-			end, runtimes)
-		end,
-	})]]
 end
