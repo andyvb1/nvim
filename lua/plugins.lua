@@ -221,6 +221,18 @@ local plugins = {
 		config = require("plugins.config.todo-comments"),
 	},
 	{
+		"craftzdog/solarized-osaka.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = require("plugins.config.solarized_osaka"),
+	},
+	{
+		"ribru17/bamboo.nvim",
+		lazy = false,
+		priority = 1000,
+		config = require("plugins.config.bamboo"),
+	},
+	{
 		"ThePrimeagen/vim-be-good",
 	},
 	-- local

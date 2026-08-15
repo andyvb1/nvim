@@ -1,2 +1,2 @@
-vim.cmd("colorscheme catppuccin-mocha") --also check lualine theme
+vim.cmd("colorscheme bamboo-multiplex") --also check lualine theme
 vim.cmd("set termguicolors")
