@@ -156,7 +156,14 @@ return function()
 	}
 
 	local jdtls_config = {
-		cmd = { vim.fn.stdpath("data") .. "/mason/bin/jdtls", "-data", workspace_dir },
+		cmd = {
+			vim.fn.stdpath("data") .. "/mason/bin/jdtls",
+			"--jvm-arg=-Xms256M",
+			"--jvm-arg=-Xmx2g",
+			"--jvm-arg=-XX:+UseG1GC",
+			"-data",
+			workspace_dir,
+		},
 		capabilities = require("blink.cmp").get_lsp_capabilities(),
 		root_dir = root_dir,
 		settings = {
