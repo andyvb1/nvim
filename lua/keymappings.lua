@@ -12,6 +12,17 @@ local function with_icon(icon, label)
 	end
 	return label
 end
+-- folding
+wk.register({
+	z = {
+		M = {
+			function()
+				vim.opt.foldlevel = 0
+			end,
+			"Fold Max",
+		},
+	},
+})
 
 -- trouble
 wk.register({
