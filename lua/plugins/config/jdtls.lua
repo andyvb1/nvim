@@ -158,9 +158,12 @@ return function()
 	local jdtls_config = {
 		cmd = {
 			vim.fn.stdpath("data") .. "/mason/bin/jdtls",
+			"--jvm-arg=-XX:+UseParallelGC",
+			"--jvm-arg=-XX:GCTimeRatio=4",
+			"--jvm-arg=-XX:AdaptiveSizePolicyWeight=90",
+			"--jvm-arg=-Dsun.zip.disableMemoryMapping=true",
 			"--jvm-arg=-Xms256M",
 			"--jvm-arg=-Xmx2g",
-			"--jvm-arg=-XX:+UseG1GC",
 			"-data",
 			workspace_dir,
 		},
