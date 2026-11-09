@@ -93,10 +93,16 @@ wk.register({
 })
 
 --  Telescope
-utils.map("n", "<leader>ff", ":Telescope find_files<CR>") -- Optional
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
+wk.register({
+	f = {
+		name = "Find",
+		f = { builtin.find_files, "files" },
+		g = { builtin.live_grep, "live grep" },
+		s = { builtin.lsp_dynamic_workspace_symbols, "workspace symbols" },
+		b = { builtin.buffers, "buffers" },
+		h = { builtin.help_tags, "help tags" },
+	},
+}, { prefix = "<leader>" })
 
 --  Harpoon
 vim.keymap.set("n", "<leader>hn", require("harpoon.ui").nav_next)
