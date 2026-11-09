@@ -245,6 +245,12 @@ local plugins = {
 		opts = {},
 		config = require(config_dir .. "neopywal"),
 	},
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		after = { "nvim-treesitter" },
+		requires = { "nvim-mini/mini.icons", opt = true },
+		config = require(config_dir .. "render_md"),
+	},
 	-- local
 	--{ dir = "" },
 }

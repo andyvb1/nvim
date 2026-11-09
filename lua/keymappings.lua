@@ -4,6 +4,7 @@ local builtin = require("telescope.builtin")
 local dap = require("dap")
 local jdtls = require("jdtls")
 local dapui_controls = require("dapui.config").controls or {}
+local ufo = require("plugins.config.ufo")
 local dapui_icons = dapui_controls.icons or {}
 
 local function with_icon(icon, label)
@@ -12,17 +13,6 @@ local function with_icon(icon, label)
 	end
 	return label
 end
--- folding
-wk.register({
-	z = {
-		M = {
-			function()
-				vim.opt.foldlevel = 0
-			end,
-			"Fold Max",
-		},
-	},
-})
 
 -- trouble
 wk.register({
@@ -91,9 +81,16 @@ wk.register({
 		},
 	},
 }, { prefix = "<leader>", mode = "n" })
+
 --  UFO Folding
-vim.keymap.set("n", "zN", require("ufo").openAllFolds)
-vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+wk.register({
+	z = {
+		R = { require("ufo").openAllFolds, "Open All Folds" },
+		M = { require("ufo").closeAllFolds, "Close All Folds" },
+		r = { require("ufo").openFoldsExceptKinds, "Fold Less" },
+		m = { require("ufo").closeFoldsWith, "Fold More" },
+	},
+})
 
 --  Telescope
 utils.map("n", "<leader>ff", ":Telescope find_files<CR>") -- Optional
