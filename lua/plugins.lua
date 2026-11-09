@@ -65,10 +65,6 @@ local plugins = {
 		config = require(config_dir .. "treesj"),
 	},
 	{
-		"numToStr/Comment.nvim",
-		config = require(config_dir .. "comment"),
-	},
-	{
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = require(config_dir .. "telescope"),
@@ -89,7 +85,7 @@ local plugins = {
 	},
 	{
 		"folke/which-key.nvim",
-		tag = "v1.5.1",
+		tag = "v3.17.0",
 		config = require(config_dir .. "which_key"),
 	},
 	{
@@ -202,12 +198,6 @@ local plugins = {
 	{
 		"norcalli/nvim-colorizer.lua",
 		config = require(config_dir .. "colorizer"),
-	},
-	{
-		"benomahony/uv.nvim",
-		opts = {
-			picker_integration = true,
-		},
 	},
 	{
 		"stevearc/dressing.nvim",

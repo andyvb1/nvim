@@ -1,4 +1,3 @@
-local utils = require("utils")
 local wk = require("which-key")
 local builtin = require("telescope.builtin")
 local dap = require("dap")
@@ -7,23 +6,7 @@ local dapui_controls = require("dapui.config").controls or {}
 local ufo = require("plugins.config.ufo")
 local dapui_icons = dapui_controls.icons or {}
 
-local function with_icon(icon, label)
-	if icon then
-		return icon .. " " .. label
-	end
-	return label
-end
-
--- trouble
-wk.register({
-	q = { "<cmd>Trouble diagnostics toggle<cr>", "Diagnostics List (Trouble)" },
-}, { prefix = "<leader>" })
-
---  ToggleTerm Key Mappings
-utils.map("i", [[<C-\>]], '<cmd>exe v:count1 . "ToggleTerm size=80 direction=vertical"<CR>')
-utils.map("n", [[<C-\>]], '<cmd>exe v:count1 . "ToggleTerm size=20 direction=horizontal"<CR>')
-
--- Terminal keymaps (buffer-local)
+-- Terminal keymaps
 function _G.set_terminal_keymaps()
 	local opts = { noremap = true }
 	vim.api.nvim_buf_set_keymap(0, "t", "<esc>", [[<C-\><C-n>]], opts)
@@ -32,174 +15,184 @@ end
 
 vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
---  Paste without overwriting clipboard
-vim.keymap.set("x", "p", '"_dP"', { noremap = true, silent = true })
+-- Paste without overwriting clipboard
+vim.keymap.set("x", "p", "P")
+vim.keymap.set("x", "P", "p")
 
---  BufferLine
-utils.map("n", "gb", ":BufferLinePick<CR>")
-utils.map("n", "<leader>bl", ":BufferLinePick<CR>")
-
---  Neo-tree
-vim.keymap.set("n", "<F2>", "<Cmd>Neotree toggle<CR>")
--- utils.map('n', '<C-n>', ':Neotree toggle<CR>') -- optional
-
---code actions
-wk.register({
-	d = {
-		name = "Debug",
-		["1"] = {
-			function()
-				jdtls.test_class()
-			end,
-			"Test java class",
-		},
-		b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
-		B = {
-			function()
-				dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-			end,
-			"Conditional Breakpoint",
-		},
-		c = { dap.continue, with_icon(dapui_icons.play, "Continue / Attach") },
-		C = {
-			function()
-				jdtls.test_nearest_method()
-			end,
-			"jdt test nearest method",
-		},
-		s = { dap.step_over, with_icon(dapui_icons.step_over, "Step Over") },
-		i = { dap.step_into, with_icon(dapui_icons.step_into, "Step Into") },
-		o = { dap.step_out, with_icon(dapui_icons.step_out, "Step Out") },
-		r = { dap.repl.open, "Open REPL" },
-		l = { dap.run_last, with_icon(dapui_icons.run_last, "Run Last") },
-		t = { dap.terminate, with_icon(dapui_icons.terminate, "Terminate") },
-		m = {
-			function()
-				_G.dap_enable_step_mode()
-			end,
-			"Stepping Mode",
-		},
+-- General / plugins without a leader prefix
+wk.add({
+	{ "<F2>", "<Cmd>Neotree toggle<CR>", desc = "Toggle Neo-tree" },
+	{ "gb", ":BufferLinePick<CR>", desc = "Pick buffer (BufferLine)" },
+	{
+		[[<C-\>]],
+		'<cmd>exe v:count1 . "ToggleTerm size=20 direction=horizontal"<CR>',
+		desc = "Toggle terminal (horizontal)",
 	},
-}, { prefix = "<leader>", mode = "n" })
-
---  UFO Folding
-wk.register({
-	z = {
-		R = { require("ufo").openAllFolds, "Open All Folds" },
-		M = { require("ufo").closeAllFolds, "Close All Folds" },
-		r = { require("ufo").openFoldsExceptKinds, "Fold Less" },
-		m = { require("ufo").closeFoldsWith, "Fold More" },
+	{
+		[[<C-\>]],
+		'<cmd>exe v:count1 . "ToggleTerm size=80 direction=vertical"<CR>',
+		desc = "Toggle terminal (vertical)",
+		mode = "i",
 	},
 })
 
---  Telescope
-wk.register({
-	f = {
-		name = "Find",
-		f = { builtin.find_files, "files" },
-		g = { builtin.live_grep, "live grep" },
-		s = { builtin.lsp_dynamic_workspace_symbols, "workspace symbols" },
-		b = { builtin.buffers, "buffers" },
-		h = { builtin.help_tags, "help tags" },
+-- Leader: misc
+wk.add({
+	{ "<leader>q", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics List (Trouble)" },
+	{
+		"<leader>C",
+		function()
+			local schemes = vim.fn.getcompletion("", "color")
+			vim.ui.select(schemes, { prompt = "Select colorscheme" }, function(choice)
+				if choice then
+					vim.cmd.colorscheme(choice)
+				end
+			end)
+		end,
+		desc = "Select colorscheme",
 	},
-}, { prefix = "<leader>" })
+})
 
---  Harpoon
-vim.keymap.set("n", "<leader>hn", require("harpoon.ui").nav_next)
-vim.keymap.set("n", "<leader>hp", require("harpoon.ui").nav_prev)
-utils.map("n", "<leader>hm", ":Telescope harpoon marks<CR>")
+-- Folding (UFO)
+wk.add({
+	{ "zR", require("ufo").openAllFolds, desc = "Open All Folds" },
+	{ "zM", require("ufo").closeAllFolds, desc = "Close All Folds" },
+	{ "zr", require("ufo").openFoldsExceptKinds, desc = "Fold Less" },
+	{ "zm", require("ufo").closeFoldsWith, desc = "Fold More" },
+})
 
-wk.register({
-	h = {
-		name = "harpoon",
-		x = {
-			function()
-				require("harpoon.mark").add_file()
-			end,
-			"Mark file",
-		},
+-- Debug
+wk.add({
+	{ "<leader>d", group = "Debug" },
+	{
+		"<leader>d1",
+		function()
+			jdtls.test_class()
+		end,
+		desc = "Test java class",
 	},
-}, { prefix = "<leader>" })
-
---  Spectre
-vim.keymap.set("n", "<leader>S", function()
-	require("spectre").toggle()
-end, { desc = "Toggle Spectre" })
-vim.keymap.set("n", "<leader>sw", function()
-	require("spectre").open_visual({ select_word = true })
-end, { desc = "Search current word" })
-vim.keymap.set(
-	"v",
-	"<leader>sw",
-	'<esc><cmd>lua require("spectre").open_visual()<CR>',
-	{ desc = "Search current word" }
-)
-vim.keymap.set("n", "<leader>sf", function()
-	require("spectre").open_file_search({ select_word = true })
-end, { desc = "Search on current file" })
-
---  Flash
-wk.register({
-	l = {
-		name = "flash",
-		s = {
-			function()
-				require("flash").jump()
-			end,
-			"Flash Jump",
-		},
-		t = {
-			function()
-				require("flash").treesitter()
-			end,
-			"Flash Treesitter",
-		},
-		r = {
-			function()
-				require("flash").treesitter_search()
-			end,
-			"Flash Treesitter Search",
-		},
+	{ "<leader>db", dap.toggle_breakpoint, desc = "Toggle Breakpoint" },
+	{
+		"<leader>dB",
+		function()
+			dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+		end,
+		desc = "Conditional Breakpoint",
 	},
-}, { prefix = "<leader>" })
-
---  Gitsigns
-wk.register({
-	g = {
-		name = "Gitsigns",
-		s = { "<cmd>lua require('gitsigns').stage_hunk()<cr>", "Stage Hunk" },
-		u = { "<cmd>lua require('gitsigns').undo_stage_hunk()<cr>", "Undo Stage Hunk" },
-		r = { "<cmd>lua require('gitsigns').reset_hunk()<cr>", "Reset Hunk" },
-		p = { "<cmd>lua require('gitsigns').preview_hunk()<cr>", "Preview Hunk" },
-		b = { "<cmd>lua require('gitsigns').blame_line()<cr>", "Blame Line" },
-		f = { "<cmd>lua require('gitsigns').diffthis('~1')<cr>", "Diff This" },
-		n = { "<cmd>lua require('gitsigns').next_hunk()<cr>", "Next Hunk" },
+	{ "<leader>dc", dap.continue, desc = "Continue / Attach", icon = dapui_icons.play },
+	{
+		"<leader>dC",
+		function()
+			jdtls.test_nearest_method()
+		end,
+		desc = "jdt test nearest method",
 	},
-}, { prefix = "<leader>" })
-
---  Lspsaga
-wk.register({
-	l = {
-		name = "Lspsaga",
-		c = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
-		o = { "<cmd>Lspsaga outline<cr>", "Outline" },
-		r = { "<cmd>Lspsaga rename<cr>", "Rename" },
-		d = { "<cmd>Lspsaga goto_definition<cr>", "Lsp GoTo Definition" },
-		f = { "<cmd>Lspsaga finder<cr>", "Lsp Finder" },
-		p = { "<cmd>Lspsaga preview_definition<cr>", "Preview Definition" },
-		s = { "<cmd>Lspsaga signature_help<cr>", "Signature Help" },
-		w = { "<cmd>Lspsaga show_workspace_diagnostics<cr>", "Show Workspace Diagnostics" },
+	{ "<leader>ds", dap.step_over, desc = "Step Over", icon = dapui_icons.step_over },
+	{ "<leader>di", dap.step_into, desc = "Step Into", icon = dapui_icons.step_into },
+	{ "<leader>do", dap.step_out, desc = "Step Out", icon = dapui_icons.step_out },
+	{ "<leader>dr", dap.repl.open, desc = "Open REPL" },
+	{ "<leader>dl", dap.run_last, desc = "Run Last", icon = dapui_icons.run_last },
+	{ "<leader>dt", dap.terminate, desc = "Terminate", icon = dapui_icons.terminate },
+	{
+		"<leader>dm",
+		function()
+			_G.dap_enable_step_mode()
+		end,
+		desc = "Stepping Mode",
 	},
-}, { prefix = "<leader>" })
+})
 
-vim.keymap.set("n", "<leader>C", function()
-	local schemes = vim.fn.getcompletion("", "color")
+-- Telescope
+wk.add({
+	{ "<leader>f", group = "Find" },
+	{ "<leader>ff", builtin.find_files, desc = "files" },
+	{ "<leader>fg", builtin.live_grep, desc = "live grep" },
+	{ "<leader>fs", builtin.lsp_dynamic_workspace_symbols, desc = "workspace symbols" },
+	{ "<leader>fb", builtin.buffers, desc = "buffers" },
+	{ "<leader>fh", builtin.help_tags, desc = "help tags" },
+})
 
-	vim.ui.select(schemes, {
-		prompt = "Select colorscheme",
-	}, function(choice)
-		if choice then
-			vim.cmd.colorscheme(choice)
-		end
-	end)
-end, { desc = "Select colorscheme" })
+-- Harpoon
+wk.add({
+	{ "<leader>h", group = "harpoon" },
+	{ "<leader>hn", require("harpoon.ui").nav_next, desc = "Next mark" },
+	{ "<leader>hp", require("harpoon.ui").nav_prev, desc = "Previous mark" },
+	{ "<leader>hm", ":Telescope harpoon marks<CR>", desc = "Marks (Telescope)" },
+	{
+		"<leader>hx",
+		function()
+			require("harpoon.mark").add_file()
+		end,
+		desc = "Mark file",
+	},
+})
+
+-- Spectre
+wk.add({
+	{
+		"<leader>S",
+		function()
+			require("spectre").toggle()
+		end,
+		desc = "Toggle Spectre",
+	},
+	{ "<leader>s", group = "spectre" },
+	{
+		"<leader>sw",
+		function()
+			require("spectre").open_visual({ select_word = true })
+		end,
+		desc = "Search current word",
+	},
+	{
+		"<leader>sw",
+		'<esc><cmd>lua require("spectre").open_visual()<CR>',
+		desc = "Search current word",
+		mode = "v",
+	},
+	{
+		"<leader>sf",
+		function()
+			require("spectre").open_file_search({ select_word = true })
+		end,
+		desc = "Search on current file",
+	},
+})
+
+-- Flash
+wk.add({
+	{
+		"<leader>lt",
+		function()
+			require("flash").treesitter()
+		end,
+		desc = "Flash Treesitter",
+	},
+	-- { "<leader>ls", function() require("flash").jump() end, desc = "Flash Jump" },
+	-- { "<leader>lr", function() require("flash").treesitter_search() end, desc = "Flash Treesitter Search" },
+})
+
+-- Gitsigns
+wk.add({
+	{ "<leader>G", group = "Gitsigns" },
+	{ "<leader>Gs", "<cmd>lua require('gitsigns').stage_hunk()<cr>", desc = "Stage Hunk" },
+	{ "<leader>Gu", "<cmd>lua require('gitsigns').undo_stage_hunk()<cr>", desc = "Undo Stage Hunk" },
+	{ "<leader>Gr", "<cmd>lua require('gitsigns').reset_hunk()<cr>", desc = "Reset Hunk" },
+	{ "<leader>Gp", "<cmd>lua require('gitsigns').preview_hunk()<cr>", desc = "Preview Hunk" },
+	{ "<leader>Gb", "<cmd>lua require('gitsigns').blame_line()<cr>", desc = "Blame Line" },
+	{ "<leader>Gf", "<cmd>lua require('gitsigns').diffthis('~1')<cr>", desc = "Diff This" },
+	{ "<leader>Gn", "<cmd>lua require('gitsigns').next_hunk()<cr>", desc = "Next Hunk" },
+})
+
+-- Lspsaga
+wk.add({
+	{ "<leader>l", group = "Lspsaga" },
+	{ "<leader>lc", "<cmd>Lspsaga code_action<cr>", desc = "Code Action" },
+	{ "<leader>lo", "<cmd>Lspsaga outline<cr>", desc = "Outline" },
+	{ "<leader>lr", "<cmd>Lspsaga rename<cr>", desc = "Rename" },
+	{ "<leader>ld", "<cmd>Lspsaga goto_definition<cr>", desc = "Lsp GoTo Definition" },
+	{ "<leader>lf", "<cmd>Lspsaga finder<cr>", desc = "Lsp Finder" },
+	{ "<leader>lp", "<cmd>Lspsaga preview_definition<cr>", desc = "Preview Definition" },
+	{ "<leader>ls", "<cmd>Lspsaga signature_help<cr>", desc = "Signature Help" },
+	{ "<leader>lw", "<cmd>Lspsaga show_workspace_diagnostics<cr>", desc = "Show Workspace Diagnostics" },
+})

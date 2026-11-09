@@ -54,5 +54,5 @@
   "uv.nvim": { "branch": "main", "commit": "b0bce1b61584fde99c316aa0587a4996c52df206" },
   "vim-be-good": { "branch": "master", "commit": "0ae3de14eb8efc6effe7704b5e46495e91931cc5" },
   "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" },
-  "which-key.nvim": { "branch": "main", "commit": "bf09a25bdc9a83bcc69d2cf078e680368676513b" }
+  "which-key.nvim": { "branch": "main", "commit": "fcbf4eea17cb299c02557d576f0d568878e354a4" }
 }
